@@ -6,6 +6,9 @@
 #include<vector>
 #include <memory>
 #include<sstream>
+#include <chrono>
+#include <thread>
+
 #include "Fondo.h"
 #include "Barco.h"
 #include "BarcoPlayer1.h"
@@ -13,7 +16,7 @@
 #include "ItemDefault.h"
 #include "ItemDanio.h"
 #include "ItemVida.h"
-#include<random>
+
 
 class Game
 {
@@ -35,7 +38,7 @@ private:
 	sf::Text guiText2;
 
 	std::vector<std::unique_ptr<Bola>> bolitas;
-	float spawnTimerMax;
+	float Temporizador;
 	float spawnTimer;
 	int maxBolitas;
 	int numBolitas;
@@ -59,12 +62,12 @@ public:
 	const bool running() const;
 	void pollEvents();
 
-	void items();
+	void GeneradorItems();
 	void updatePlayer();
 	void Colision();
 	void Notificador();
 	void update();
 
-	void renderGui(sf::RenderTarget* target);
+	void Mostrar_texto(sf::RenderTarget* target);
 	void render();
 };

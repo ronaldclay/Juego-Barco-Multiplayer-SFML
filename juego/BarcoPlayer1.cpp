@@ -2,7 +2,7 @@
 #include <iostream>
 
 void BarcoPlayer1::inicializarImagenBarco() {
-	if (!this->textureBarco.loadFromFile("BarcoPlayer2.png"))
+	if (!this->textureBarco.loadFromFile("BarcoPlayer1.png"))
 	{
 		std::cout << "ERROR::PLAYER::INITSHAPE::Failed to load Barco.png" << std::endl;
 	}

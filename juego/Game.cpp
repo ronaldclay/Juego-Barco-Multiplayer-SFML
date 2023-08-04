@@ -1,28 +1,25 @@
 // Game.cpp
 #include "Game.h"
 #include "Fondo.h"
-#include <vector>
-#include <chrono>
-#include <thread>
 
 void Game::inicializarVariables()
 {
 	this->fin_del_juego = false;
-	this->spawnTimerMax = 10.f;
-	this->spawnTimer = this->spawnTimerMax;
+	this->Temporizador = 10.f;
+	this->spawnTimer = this->Temporizador;
 	this->maxBolitas = 20;
 	this->numBolitas = 0;
 	this->Punto1 = 0;
 	this->Punto2 = 0;
-	player1 = std::make_shared<BarcoPlayer2>();
-	player2 = std::make_shared<BarcoPlayer1>();
+	player1 = std::make_shared<BarcoPlayer1>();
+	player2 = std::make_shared<BarcoPlayer2>();
 	player1->iniciaVariables();
 	player2->iniciaVariables();
 }
 
 void Game::inicializarWindow()
 {
-	this->videoMode = sf::VideoMode(1000, 1000);
+	this->videoMode = sf::VideoMode(1900, 1000);
 	this->window = new sf::RenderWindow(this->videoMode, "Barquito", sf::Style::Close | sf::Style::Titlebar);
 	this->window->setFramerateLimit(60);
 	this->fondo = new Fondo("Fondo.png");
@@ -40,19 +37,19 @@ void Game::inicializarTexto()
 {
 	//Estadistica j1
 	this->guiText.setFont(this->fuente);
-	this->guiText.setFillColor(sf::Color::Magenta);
-	this->guiText.setCharacterSize(32);
+	this->guiText.setFillColor(sf::Color::Black);
+	this->guiText.setCharacterSize(50);
 	//Estadistica j2
 	this->guiText2.setFont(this->fuente);
 	this->guiText2.setFillColor(sf::Color::Black);
-	this->guiText2.setCharacterSize(32);
-	this->guiText2.setPosition(800, 0);
+	this->guiText2.setCharacterSize(50);
+	this->guiText2.setPosition(1650, 0);
 
 	//Fin texto juego
 	this->fin_del_juego_texto.setFont(this->fuente);
 	this->fin_del_juego_texto.setFillColor(sf::Color::Green);
 	this->fin_del_juego_texto.setCharacterSize(60);
-	this->fin_del_juego_texto.setPosition(sf::Vector2f(250, 250));
+	this->fin_del_juego_texto.setPosition(sf::Vector2f(650, 250));
 
 
 }
@@ -99,14 +96,14 @@ void Game::pollEvents()
 	}
 }
 
-void Game::items()
+void Game::GeneradorItems()
 {
-	if (this->spawnTimer < this->spawnTimerMax) {
+	if (this->spawnTimer < this->Temporizador) {
 		this->spawnTimer += 1.f;
 		return;
 	}
 	
-		if (this->spawnTimer >= this->spawnTimerMax && this->bolitas.size() < this->maxBolitas) {
+		if (this->spawnTimer >= this->Temporizador && this->bolitas.size() < this->maxBolitas) {
 			std::unique_ptr<Bola> nuevaBolita;
 
 			int randomType = std::rand() % 3; // Generar un tipo aleatorio (0, 1 o 2)
@@ -181,6 +178,9 @@ void Game::Colision()
 				using namespace std::chrono_literals;
 				std::this_thread::sleep_for(500ms);
 				player1->recibirDaño(1);
+				if (Punto1 > 0) {
+					Punto1 = Punto1 - 1;
+				}
 				break;
 			case 2: // BolaVida
 				player1->ganarSalud(1);
@@ -203,6 +203,9 @@ void Game::Colision()
 				using namespace std::chrono_literals;
 				std::this_thread::sleep_for(500ms);
 				player2->recibirDaño(1);
+				if (Punto2 > 0) {
+					Punto2 = Punto2 - 1;
+				}
 				break;
 			case 2: // BolaVida
 				player2->ganarSalud(1);
@@ -238,14 +241,14 @@ void Game::update()
 
 	if (this->fin_del_juego == false)
 	{
-		this->items();
+		this->GeneradorItems();
 		this->updatePlayer();
 		this->Colision();
 		this->Notificador();
 	}
 }
 
-void Game::renderGui(sf::RenderTarget* target)
+void Game::Mostrar_texto(sf::RenderTarget* target)
 {
 	target->draw(this->guiText);
 	target->draw(this->guiText2);
@@ -266,7 +269,7 @@ void Game::render()
 	}
 
 	//Render gui
-	this->renderGui(this->window);
+	this->Mostrar_texto(this->window);
 
 	//Render end text
 	if (this->fin_del_juego == true)

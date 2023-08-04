@@ -54,19 +54,19 @@ float& Barco::getVelocidad() {
 	return this->velocidad;
 }
 //Functions
-void Barco::recibirDaño(const int damage)
+void Barco::recibirDaño(const int Danio)
 {
 	if (this->vida > 0)
-		this->vida -= damage;
+		this->vida -= Danio;
 
 	if (this->vida < 0)
 		this->vida = 0;
 }
 
-void Barco::ganarSalud(const int health)
+void Barco::ganarSalud(const int Vida)
 {
 	if (this->vida < this->vidaMax)
-		this->vida += health;
+		this->vida += Vida;
 
 	if (this->vida > this->vidaMax)
 		this->vida = this->vidaMax;
